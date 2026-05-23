@@ -16,3 +16,42 @@ ehthumbs.db
 # Temp files
 *.tmp
 *.bak
+
+# ========================================
+# Arquivos não usados na página (rascunhos,
+# manual da marca, variantes de logo, etc.)
+# Apenas o que está referenciado no index.html
+# deve subir.
+# ========================================
+
+# Rascunhos do ChatGPT (manter apenas o hero bg principal)
+ChatGPT Image 15 de mai. de 2026, 19_30_44.png
+ChatGPT Image 15 de mai. de 2026, 19_33_08.png
+ChatGPT Image 15 de mai. de 2026, 19_33_08 (1).png
+ChatGPT Image 15 de mai. de 2026, 19_33_08 (1) (1).png
+ChatGPT Image 21 de mai. de 2026, 18_48_45 (1).png
+ChatGPT Image 21 de mai. de 2026, 18_48_45 (2).png
+ChatGPT Image 21 de mai. de 2026, 18_48_47 (8).png
+
+# Designs antigos / Heros antigas
+Design sem nome (4).png
+Design sem nome (9).jpg
+Hero-desktop.png
+Hero-desktop2.png
+
+# Manual da marca (sensível)
+*.pdf
+
+# Variantes de logo não usadas no site
+Logo-FARMÁCIA10X-AZUL ECLIPSE (2).svg
+Logo-FARMÁCIA10X-AZUL OCEANO (2).svg
+Logo-FARMÁCIA10X-BRANCO GELO (2).svg
+Símbolo-AZUL ECLIPSE.png
+Símbolo-AZUL OCEANO (1).png
+Símbolo-BRANCO GELO - Copia.png
+
+# Imagens não referenciadas no HTML atual
+learn-equipe.png
+learn-grafico.png
+magnific_photo-a-bald-smiling-55ye_2991047453.png
+scoreboard-copa10x.png
