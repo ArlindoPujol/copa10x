@@ -55,3 +55,10 @@ learn-equipe.png
 learn-grafico.png
 magnific_photo-a-bald-smiling-55ye_2991047453.png
 scoreboard-copa10x.png
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
