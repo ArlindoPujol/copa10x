@@ -1825,9 +1825,15 @@
       els.forEach(function(el){ io.observe(el); });
     })();
 
-    /* Checkout popup — captura UTMs, valida form, envia para Eduzz */
+    /* Checkout popup — captura UTMs, valida form, dispara webhook + InitiateCheckout, envia para Eduzz */
     (function(){
       var CHECKOUT_URL = 'https://chk.eduzz.com/ns6wz4kp';
+      var WEBHOOK_URL  = 'https://webhook.farmacia10x.com.br/webhook/farmacia10x/pre-checkout';
+      var REVENUE_LABELS = {
+        'ate-100k':    'Até 100 mil',
+        '101-299k':    'De 101 até 299 mil',
+        'acima-300k':  'Acima de 300 mil'
+      };
       var popup = document.getElementById('checkoutPopup');
       var form = document.getElementById('checkoutForm');
       if (!popup || !form) return;
@@ -1881,7 +1887,7 @@
         });
       }
 
-      /* Submit: valida, dispara InitiateCheckout, monta URL e redireciona */
+      /* Submit: valida, dispara webhook + InitiateCheckout, monta URL e redireciona */
       form.addEventListener('submit', function(e){
         e.preventDefault();
         if (!form.checkValidity()){
@@ -1891,8 +1897,45 @@
         var data = new FormData(form);
         var name = (data.get('name') || '').trim();
         var email = (data.get('email') || '').trim();
-        var phone = (data.get('phone') || '').replace(/\D/g,'');
+        var phoneRaw = (data.get('phone') || '').replace(/\D/g,'');
+        var phoneFormatted = (data.get('phone') || '').trim();
         var revenue = data.get('revenue') || '';
+        var revenueLabel = REVENUE_LABELS[revenue] || revenue;
+
+        /* Webhook pré-checkout (fire-and-forget, não bloqueia o redirect) */
+        try {
+          var payload = {
+            event: 'pre_checkout',
+            source: 'copa10x_landing',
+            timestamp: new Date().toISOString(),
+            lead: {
+              name: name,
+              email: email,
+              phone: phoneRaw,
+              phone_formatted: phoneFormatted,
+              revenue: revenue,
+              revenue_label: revenueLabel
+            },
+            tracking: capturedUtms,
+            page: {
+              url: window.location.href,
+              referrer: document.referrer || null,
+              user_agent: navigator.userAgent
+            },
+            product: {
+              name: 'COPA 10x',
+              price: 97.00,
+              currency: 'BRL'
+            }
+          };
+          fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            keepalive: true,
+            mode: 'cors'
+          }).catch(function(){ /* silencioso — não trava o checkout */ });
+        } catch(_){ /* qualquer erro síncrono ignorado */ }
 
         /* Meta Pixel: InitiateCheckout */
         if (typeof fbq === 'function'){
@@ -1910,7 +1953,7 @@
         var params = new URLSearchParams();
         if (name)    params.set('name', name);
         if (email)   params.set('email', email);
-        if (phone)   params.set('tel', phone);
+        if (phoneRaw) params.set('tel', phoneRaw);
         if (revenue) params.set('faturamento', revenue);
         Object.keys(capturedUtms).forEach(function(k){
           params.set(k, capturedUtms[k]);
