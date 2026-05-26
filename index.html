@@ -1188,6 +1188,148 @@
         box-shadow:0 8px 20px rgba(80,200,75,0.18);
       }
     }
+
+    /* ===== Checkout Popup ===== */
+    .checkout-popup{
+      position:fixed;inset:0;
+      z-index:9999;
+      display:none;
+      align-items:center;justify-content:center;
+      padding:20px;
+    }
+    .checkout-popup.is-open{display:flex}
+    .checkout-popup-backdrop{
+      position:absolute;inset:0;
+      background:rgba(8,15,30,0.78);
+      backdrop-filter:blur(6px);
+      -webkit-backdrop-filter:blur(6px);
+      animation:popup-fade .2s ease-out;
+    }
+    .checkout-popup-card{
+      position:relative;
+      width:100%;max-width:460px;
+      background:#fff;
+      border-radius:18px;
+      padding:36px 32px 28px;
+      box-shadow:0 30px 80px rgba(0,0,0,.35);
+      animation:popup-slide .28s cubic-bezier(.22,.94,.33,1);
+    }
+    @keyframes popup-fade{from{opacity:0}to{opacity:1}}
+    @keyframes popup-slide{
+      from{opacity:0;transform:translateY(20px) scale(.97)}
+      to{opacity:1;transform:translateY(0) scale(1)}
+    }
+    .checkout-popup-close{
+      position:absolute;top:14px;right:14px;
+      width:36px;height:36px;
+      border:none;background:transparent;cursor:pointer;
+      font-size:28px;line-height:1;
+      color:#94a3b8;
+      border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      transition:background-color .15s ease, color .15s ease;
+      padding:0;
+    }
+    .checkout-popup-close:hover{
+      background:#f1f5f9;color:#475569;
+    }
+    .checkout-popup-title{
+      font-family:'Plus Jakarta Sans','Inter',sans-serif;
+      font-size:20px;font-weight:600;
+      color:#1e293b;
+      text-align:center;
+      margin-bottom:8px;
+      letter-spacing:-0.01em;
+    }
+    .checkout-popup-subtitle{
+      font-family:'Plus Jakarta Sans','Inter',sans-serif;
+      font-size:13px;font-weight:700;
+      color:#475569;
+      text-align:center;
+      text-transform:uppercase;
+      letter-spacing:0.04em;
+      margin-bottom:24px;
+      line-height:1.4;
+    }
+    .checkout-popup-form{
+      display:flex;flex-direction:column;gap:12px;
+    }
+    .checkout-popup-input{
+      width:100%;
+      padding:14px 20px;
+      font-family:'Inter','Plus Jakarta Sans',sans-serif;
+      font-size:15px;
+      color:#1e293b;
+      background:#fff;
+      border:1.5px solid #cbd5e1;
+      border-radius:999px;
+      outline:none;
+      transition:border-color .15s ease, box-shadow .15s ease;
+      -webkit-appearance:none;appearance:none;
+    }
+    .checkout-popup-input::placeholder{
+      color:#94a3b8;
+      font-style:italic;
+    }
+    .checkout-popup-input:focus{
+      border-color:var(--green);
+      box-shadow:0 0 0 3px rgba(88,200,77,0.15);
+    }
+    .checkout-popup-input:invalid:not(:placeholder-shown){
+      border-color:#fca5a5;
+    }
+    .checkout-popup-select{
+      padding-right:42px;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='1 1 6 6 11 1'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;
+      background-position:right 18px center;
+      background-size:12px 8px;
+      color:#94a3b8;
+      font-style:italic;
+      cursor:pointer;
+    }
+    .checkout-popup-select:has(option:checked:not([disabled])){
+      color:#1e293b;
+      font-style:normal;
+    }
+    .checkout-popup-submit{
+      margin-top:8px;
+      padding:16px 22px;
+      font-family:'Plus Jakarta Sans','Inter',sans-serif;
+      font-size:15px;font-weight:800;
+      color:#fff;
+      background:var(--green);
+      border:none;border-radius:999px;
+      cursor:pointer;
+      letter-spacing:0.03em;
+      box-shadow:0 10px 24px rgba(80,200,75,0.28);
+      transition:background-color .15s ease, transform .15s ease, box-shadow .15s ease;
+      min-height:54px;
+    }
+    .checkout-popup-submit:hover:not(:disabled){
+      background:var(--green-dark);
+      transform:translateY(-1px);
+      box-shadow:0 14px 30px rgba(80,200,75,0.35);
+    }
+    .checkout-popup-submit:active:not(:disabled){transform:scale(0.99)}
+    .checkout-popup-submit:disabled{
+      opacity:.7;cursor:wait;
+    }
+    .checkout-popup-trust{
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      margin-top:14px;
+      font-size:13px;color:#94a3b8;
+    }
+    .checkout-popup-trust svg{width:14px;height:14px;color:#94a3b8;flex-shrink:0}
+
+    @media (max-width: 520px){
+      .checkout-popup{padding:14px}
+      .checkout-popup-card{padding:32px 22px 22px;border-radius:16px}
+      .checkout-popup-title{font-size:18px}
+      .checkout-popup-subtitle{font-size:12px;margin-bottom:20px}
+      .checkout-popup-input{font-size:14.5px;padding:13px 18px}
+      .checkout-popup-submit{font-size:14px;padding:15px 20px;min-height:52px}
+    }
   </style>
 </head>
 <body>
@@ -1516,7 +1658,7 @@
         </div>
 
         <div class="price-actions">
-          <a href="#" class="btn btn-primary btn-hero" style="width:100%;">
+          <a href="#" class="btn btn-primary btn-hero js-open-checkout" style="width:100%;">
             Quero entrar na COPA 10x
             <svg class="ball-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <circle cx="12" cy="12" r="10"/>
@@ -1634,7 +1776,37 @@
     </div>
   </footer>
 
+  <!-- ============ Checkout Popup ============ -->
+  <div class="checkout-popup" id="checkoutPopup" aria-hidden="true" role="dialog" aria-labelledby="checkoutPopupTitle">
+    <div class="checkout-popup-backdrop" data-close-popup></div>
+    <div class="checkout-popup-card" role="document">
+      <button type="button" class="checkout-popup-close" data-close-popup aria-label="Fechar">×</button>
+      <h3 class="checkout-popup-title" id="checkoutPopupTitle">Falta apenas mais 1 passo...</h3>
+      <p class="checkout-popup-subtitle">PREENCHA O FORMULÁRIO PARA GARANTIR SEU ACESSO:</p>
+      <form id="checkoutForm" class="checkout-popup-form" novalidate>
+        <input class="checkout-popup-input" name="name" type="text" placeholder="* Nome Completo:" required autocomplete="name" />
+        <input class="checkout-popup-input" name="email" type="email" placeholder="* E-mail:" required autocomplete="email" />
+        <input class="checkout-popup-input" name="phone" type="tel" placeholder="* Telefone:" required autocomplete="tel" inputmode="numeric" />
+        <select class="checkout-popup-input checkout-popup-select" name="revenue" required>
+          <option value="" disabled selected>* Faturamento mensal</option>
+          <option value="ate-100k">Até 100 mil</option>
+          <option value="101-299k">De 101 até 299 mil</option>
+          <option value="acima-300k">Acima de 300 mil</option>
+        </select>
+        <button type="submit" class="checkout-popup-submit">COMPRAR MEU ACESSO AGORA</button>
+        <p class="checkout-popup-trust">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="5" y="11" width="14" height="10" rx="2"/>
+            <path d="M8 11V7a4 4 0 018 0v4"/>
+          </svg>
+          Seus dados estão protegidos.
+        </p>
+      </form>
+    </div>
+  </div>
+
   <script>
+    /* Reveal on scroll */
     (function(){
       var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var els = document.querySelectorAll('.reveal');
@@ -1651,6 +1823,109 @@
         });
       }, { threshold: 0.14, rootMargin: '0px 0px -40px 0px' });
       els.forEach(function(el){ io.observe(el); });
+    })();
+
+    /* Checkout popup — captura UTMs, valida form, envia para Eduzz */
+    (function(){
+      var CHECKOUT_URL = 'https://chk.eduzz.com/ns6wz4kp';
+      var popup = document.getElementById('checkoutPopup');
+      var form = document.getElementById('checkoutForm');
+      if (!popup || !form) return;
+
+      /* Captura UTMs e parâmetros de tracking da URL atual */
+      var trackedParams = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','utm_id','fbclid','gclid','ttclid','src','sck','xcod'];
+      var urlParams = new URLSearchParams(window.location.search);
+      var capturedUtms = {};
+      trackedParams.forEach(function(key){
+        var val = urlParams.get(key);
+        if (val) capturedUtms[key] = val;
+      });
+
+      /* Abrir popup */
+      function openPopup(e){
+        if (e) e.preventDefault();
+        popup.classList.add('is-open');
+        popup.setAttribute('aria-hidden','false');
+        document.body.style.overflow = 'hidden';
+        setTimeout(function(){
+          var first = form.querySelector('input[name="name"]');
+          if (first) first.focus();
+        }, 80);
+      }
+      var triggers = document.querySelectorAll('.js-open-checkout');
+      triggers.forEach(function(t){ t.addEventListener('click', openPopup); });
+
+      /* Fechar popup */
+      function closePopup(){
+        popup.classList.remove('is-open');
+        popup.setAttribute('aria-hidden','true');
+        document.body.style.overflow = '';
+      }
+      popup.querySelectorAll('[data-close-popup]').forEach(function(el){
+        el.addEventListener('click', closePopup);
+      });
+      document.addEventListener('keydown', function(e){
+        if (e.key === 'Escape' && popup.classList.contains('is-open')) closePopup();
+      });
+
+      /* Máscara simples de telefone brasileiro */
+      var phoneInput = form.querySelector('input[name="phone"]');
+      if (phoneInput){
+        phoneInput.addEventListener('input', function(e){
+          var v = e.target.value.replace(/\D/g,'').slice(0,11);
+          var out = '';
+          if (v.length > 0) out = '(' + v.slice(0,2);
+          if (v.length >= 3) out += ') ' + v.slice(2,7);
+          if (v.length >= 8) out += '-' + v.slice(7,11);
+          e.target.value = out;
+        });
+      }
+
+      /* Submit: valida, dispara InitiateCheckout, monta URL e redireciona */
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        if (!form.checkValidity()){
+          form.reportValidity();
+          return;
+        }
+        var data = new FormData(form);
+        var name = (data.get('name') || '').trim();
+        var email = (data.get('email') || '').trim();
+        var phone = (data.get('phone') || '').replace(/\D/g,'');
+        var revenue = data.get('revenue') || '';
+
+        /* Meta Pixel: InitiateCheckout */
+        if (typeof fbq === 'function'){
+          try {
+            fbq('track', 'InitiateCheckout', {
+              content_name: 'COPA 10x',
+              content_category: 'Evento',
+              currency: 'BRL',
+              value: 97.00
+            });
+          } catch(_){}
+        }
+
+        /* Monta URL final do Eduzz com prefill + UTMs */
+        var params = new URLSearchParams();
+        if (name)    params.set('name', name);
+        if (email)   params.set('email', email);
+        if (phone)   params.set('tel', phone);
+        if (revenue) params.set('faturamento', revenue);
+        Object.keys(capturedUtms).forEach(function(k){
+          params.set(k, capturedUtms[k]);
+        });
+
+        var finalUrl = CHECKOUT_URL + (params.toString() ? '?' + params.toString() : '');
+
+        /* Desabilita botão para evitar double-click e redireciona */
+        var btn = form.querySelector('button[type="submit"]');
+        if (btn){
+          btn.disabled = true;
+          btn.textContent = 'PROCESSANDO...';
+        }
+        window.location.href = finalUrl;
+      });
     })();
   </script>
 
