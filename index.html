@@ -1847,6 +1847,33 @@
         if (val) capturedUtms[key] = val;
       });
 
+      /* Geolocalização por IP (background, fire-and-forget) */
+      var capturedGeo = null;
+      try {
+        fetch('https://ipwho.is/?fields=ip,success,city,region,region_code,country,country_code,postal,latitude,longitude,timezone,connection', {
+          method: 'GET',
+          mode: 'cors'
+        })
+          .then(function(r){ return r.ok ? r.json() : null; })
+          .then(function(data){
+            if (!data || data.success === false) return;
+            capturedGeo = {
+              ip:           data.ip || null,
+              city:         data.city || null,
+              region:       data.region || null,
+              region_code:  data.region_code || null,
+              country:      data.country || null,
+              country_code: data.country_code || null,
+              postal:       data.postal || null,
+              latitude:     data.latitude || null,
+              longitude:    data.longitude || null,
+              timezone:     (data.timezone && data.timezone.id) || null,
+              isp:          (data.connection && data.connection.isp) || null
+            };
+          })
+          .catch(function(){ /* silencioso — geo é opcional */ });
+      } catch(_){}
+
       /* Abrir popup */
       function openPopup(e){
         if (e) e.preventDefault();
@@ -1917,6 +1944,7 @@
               revenue_label: revenueLabel
             },
             tracking: capturedUtms,
+            geo: capturedGeo,
             page: {
               url: window.location.href,
               referrer: document.referrer || null,
